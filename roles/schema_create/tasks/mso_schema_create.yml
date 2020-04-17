@@ -1,0 +1,13 @@
+- name: Create Schema Template
+  mso_schema_template:
+    host: "{{ mso_host }}"
+    username: "{{ mso_user }}"
+    password: "{{ mso_password }}"
+    port: "{{ mso_port }}"
+    schema: "{{ item.tenant_schemas_name }}"
+    tenant: "{{ item.tenant_name }}"
+    template: "{{ item.tenant_schemas_templates_name }}"
+    validate_certs: false  
+    state: present
+  loop:  '{{ aci_model_data|aci_listify("tenant","schemas","templates") }}'
+  delegate_to: localhost 

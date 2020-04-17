@@ -1,0 +1,26 @@
+#   Author: Gaetano Carlucci, Cisco CSX
+
+#   This software is distributed on an "AS IS" BASIS,
+#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either expressed or implied
+
+- name: Demo
+  hosts: all
+  connection: local
+  gather_facts: no
+  
+  vars: 
+    site1: ACI-MSITE1
+    site2: ACI-MSITE2
+
+  roles:
+  - role: tenant_create
+  - role: schema_create
+  - role: template_NET_create
+  - role: template_Contract_create
+  - role: template_APP_create 
+  - role: add_site_to_schema
+    vars:
+      site: "{{ site1 }}"
+  - role: add_site_to_schema
+    vars:
+      site:  "{{ site2 }}"

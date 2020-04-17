@@ -1,0 +1,4 @@
+---
+# tasks file for deploy_schema
+
+- import_tasks: mso_add_site.yml

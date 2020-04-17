@@ -1,0 +1,4 @@
+---
+# tasks file for tenant_create
+
+ - import_tasks: tenant_create.yml

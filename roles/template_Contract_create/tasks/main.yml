@@ -1,0 +1,4 @@
+---
+# tasks file for template_Contract_create
+
+- import_tasks: mso_template_contract_create.yml

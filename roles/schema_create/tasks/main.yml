@@ -1,0 +1,4 @@
+---
+# tasks file for schema_push
+
+- import_tasks: mso_schema_create.yml

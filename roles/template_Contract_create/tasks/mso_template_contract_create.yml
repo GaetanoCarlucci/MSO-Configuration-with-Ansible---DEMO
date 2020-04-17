@@ -1,0 +1,35 @@
+- name: Create filters 
+  mso_schema_template_filter_entry:
+    host: "{{ mso_host }}"
+    username: "{{ mso_user }}"
+    password: "{{ mso_password }}"
+    port: "{{ mso_port }}"
+    schema: "{{ item.tenant_schemas_name }}"
+    template: "{{ item.tenant_schemas_templates_name }}"
+    filter: "{{ item.tenant_schemas_templates_filters_name }}"
+    entry: "{{ item.tenant_schemas_templates_filters_name }}"
+    ethertype: ip
+    ip_protocol: unspecified
+    validate_certs: false
+    state: present
+  delegate_to: localhost
+  loop:  '{{ aci_model_data|aci_listify("tenant","schemas","templates", "filters") }}'
+
+- name: Create all contracts on DR Template Contract Objects
+  mso_schema_template_contract_filter:
+    host: "{{ mso_host }}"
+    username: "{{ mso_user }}"
+    password: "{{ mso_password }}"
+    port: "{{ mso_port }}"
+    schema: "{{ item.tenant_schemas_name }}"
+    template: "{{ item.tenant_schemas_templates_name }}"
+    contract: "{{ item.tenant_schemas_templates_contracts_name }}"
+    contract_scope: "{{ item.tenant_schemas_templates_contracts_scope }}"
+    contract_filter_type: both-way
+    filter: ip-any
+    validate_certs: false
+    state: present
+  delegate_to: localhost
+  loop:  '{{ aci_model_data|aci_listify("tenant","schemas","templates","contracts") }}'
+
+

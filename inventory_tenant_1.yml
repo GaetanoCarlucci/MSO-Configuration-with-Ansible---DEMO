@@ -1,0 +1,112 @@
+fabric01:
+  hosts:
+    mso:
+      mso_host: X.X.X.X
+      mso_user: admin
+      mso_port: 37006
+      mso_password: PASSWORD
+
+  vars:   
+    aci_model_data:
+      tenant:
+        - name: tenant_test_1
+          description: "tenant created with Ansible"
+          state: present
+          sites: ACI-MSITE1,ACI-MSITE2
+          users: admin
+          schemas: 
+          - name: schema_test_tenant_1
+            templates: 
+            - name: template_test_tenant_1
+              vrfs:
+              - name: VRF1
+              - name: VRF2
+              bds:
+              - name: BD1
+                l2Stretch: yes
+                l2UnknownUnicast: proxy
+                vrf: VRF2
+                address: 192.168.1.1/24
+                shared: yes
+                scope: public
+              - name: BD2
+                l2Stretch: yes
+                l2UnknownUnicast: proxy
+                vrf: VRF2
+                address: 192.168.2.1/24
+                shared: yes
+                scope: public
+              - name: BD3
+                l2Stretch: yes
+                l2UnknownUnicast: proxy
+                vrf: VRF2
+                address: 192.168.3.1/24
+                shared: yes
+                scope: public
+              - name: BD4
+                l2Stretch: yes
+                l2UnknownUnicast: proxy
+                vrf: VRF2
+                address: 192.168.4.1/24
+                shared: yes
+                scope: public
+              - name: BD5
+                l2Stretch: yes
+                l2UnknownUnicast: proxy
+                vrf: VRF2
+                address: 192.168.5.1/24
+                shared: yes
+                scope: public
+              anps:
+              - name: APP1
+                epgs:
+                - name: EPG1
+                  bd: BD1
+                  floodOnEncap: disabled
+                  prefGrMemb: exclude
+                  status: created
+                  contracts: 
+                  - name: global-contract-1
+                    schema: schema_test_tenant_2
+                    template: template_test_tenant_2
+                    role: consumer
+                - name: EPG2
+                  bd: BD2
+                  floodOnEncap: disabled
+                  prefGrMemb: exclude
+                  status: present
+                  contracts: 
+                  - name: global-contract-1
+                    schema: schema_test_tenant_2
+                    template: template_test_tenant_2
+                    role: consumer
+                - name: EPG3
+                  bd: BD3
+                  floodOnEncap: disabled
+                  prefGrMemb: exclude
+                  status: present
+                  contracts: 
+                  - name: global-contract-1
+                    schema: schema_test_tenant_2
+                    template: template_test_tenant_2
+                    role: consumer
+                - name: EPG4
+                  bd: BD4
+                  floodOnEncap: disabled
+                  prefGrMemb: exclude
+                  status: present
+                  contracts: 
+                  - name: global-contract-1
+                    schema: schema_test_tenant_2
+                    template: template_test_tenant_2
+                    role: consumer
+                - name: EPG5
+                  bd: BD5
+                  floodOnEncap: disabled
+                  prefGrMemb: exclude
+                  status: present
+                  contracts: 
+                  - name: global-contract-1
+                    schema: schema_test_tenant_2
+                    template: template_test_tenant_2
+                    role: consumer

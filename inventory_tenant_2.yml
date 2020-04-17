@@ -1,0 +1,49 @@
+fabric01:
+  hosts:
+    mso:
+      mso_host: X.X.X.X
+      mso_user: admin
+      mso_port: 443
+      mso_password: PASSWORD
+
+  vars:   
+    aci_model_data:
+      tenant:
+        - name: tenant_test_2
+          description: "tenant created with Ansible"
+          sites: ACI-MSITE1,ACI-MSITE2
+          users: admin
+          state: present
+          schemas: 
+          - name: schema_test_tenant_2
+            templates: 
+            - name: template_test_tenant_2
+              vrfs:
+              - name: VRF
+              bds:
+              - name: BD
+                l2Stretch: yes
+                l2UnknownUnicast: proxy
+                vrf: VRF
+                address: 10.10.1.1/24
+                shared: yes
+                scope: public
+              contracts:
+              - name: global-contract-1
+                scope: global
+              filters:
+              - name: ip-any 
+              anps:
+              - name: APP
+                epgs:
+                - name: EPG
+                  bd: BD
+                  floodOnEncap: disabled
+                  prefGrMemb: exclude
+                  status: created
+                  contracts: 
+                  - name: global-contract-1
+                    schema: schema_test_tenant_2
+                    template: template_test_tenant_2
+                    role: provider
+  

@@ -1,0 +1,16 @@
+- name: Add tenant 
+  mso_tenant:
+    host: "{{ mso_host }}"
+    username: "{{ mso_user }}"
+    password: "{{ mso_password }}"
+    port: "{{ mso_port }}"
+    tenant: "{{ item.tenant_name }}"
+    display_name: "{{ item.tenant_name }}"
+    description: "{{ item.tenant_description }}" 
+    sites: "{{ item.tenant_sites }}"
+    users: "{{ item.tenant_users }}"
+    validate_certs: false  
+    state: "{{ item.tenant_state }}"
+  loop:  '{{ aci_model_data|aci_listify("tenant") }}'
+  delegate_to: localhost
+

@@ -1,0 +1,27 @@
+- name: Add site "{{ site }}" to schema
+  mso_schema_site:
+    host: "{{ mso_host }}"
+    username: "{{ mso_user }}"
+    password: "{{ mso_password }}"
+    port: "{{ mso_port }}"
+    schema: "{{ item.tenant_schemas_name }}"
+    template: "{{ item.tenant_schemas_templates_name }}"
+    site: "{{ site }}"
+    validate_certs: false  
+    state: present
+  loop:  '{{ aci_model_data|aci_listify("tenant","schemas","templates") }}'
+  delegate_to: localhost 
+
+- name: Deploy schema to "{{ site }}"
+  mso_schema_template_deploy:
+    host: "{{ mso_host }}"
+    username: "{{ mso_user }}"
+    password: "{{ mso_password }}"
+    port: "{{ mso_port }}"
+    schema: "{{ item.tenant_schemas_name }}"
+    template: "{{ item.tenant_schemas_templates_name }}"
+    site: "{{ site }}"
+    validate_certs: false  
+    state: deploy
+  loop:  '{{ aci_model_data|aci_listify("tenant","schemas","templates") }}'
+  delegate_to: localhost

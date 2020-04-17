@@ -1,0 +1,52 @@
+- name: Create APP Profifes 
+  mso_schema_template_anp:
+    host: "{{ mso_host }}"
+    username: "{{ mso_user }}"
+    password: "{{ mso_password }}"
+    port: "{{ mso_port }}"
+    schema: "{{ item.tenant_schemas_name }}"
+    template: "{{ item.tenant_schemas_templates_name }}"
+    anp: "{{ item.tenant_schemas_templates_anps_name }}"
+    validate_certs: false
+    state: present
+  delegate_to: localhost
+  loop:  '{{ aci_model_data|aci_listify("tenant","schemas","templates","anps") }}'
+
+- name: Create EPGs
+  mso_schema_template_anp_epg:
+    host: "{{ mso_host }}"
+    username: "{{ mso_user }}"
+    password: "{{ mso_password }}"
+    port: "{{ mso_port }}"
+    schema: "{{ item.tenant_schemas_name }}"
+    template: "{{ item.tenant_schemas_templates_name }}"
+    anp: "{{ item.tenant_schemas_templates_anps_name }}"
+    epg: "{{ item.tenant_schemas_templates_anps_epgs_name }}"
+    bd: 
+       name: "{{ item.tenant_schemas_templates_anps_epgs_bd }}"
+       schema: "{{ item.tenant_schemas_name }}"
+       template: "{{ item.tenant_schemas_templates_name }}"
+    validate_certs: false
+    state: present
+  delegate_to: localhost
+  loop:  '{{ aci_model_data|aci_listify("tenant","schemas","templates","anps", "epgs") }}'
+
+- name: Create relashionship between EPG and Contract
+  mso_schema_template_anp_epg_contract:
+    host: "{{ mso_host }}"
+    username: "{{ mso_user }}"
+    password: "{{ mso_password }}"
+    port: "{{ mso_port }}"
+    schema: "{{ item.tenant_schemas_name }}"
+    template: "{{ item.tenant_schemas_templates_name }}"
+    anp: "{{ item.tenant_schemas_templates_anps_name }}"
+    epg: "{{ item.tenant_schemas_templates_anps_epgs_name }}"
+    contract:
+       name: "{{ item.tenant_schemas_templates_anps_epgs_contracts_name }}"
+       schema: "{{ item.tenant_schemas_templates_anps_epgs_contracts_schema }}"
+       template: "{{ item.tenant_schemas_templates_anps_epgs_contracts_template }}"
+       type: "{{ item.tenant_schemas_templates_anps_epgs_contracts_role }}"
+    validate_certs: false
+    state: present
+  delegate_to: localhost
+  loop:  '{{ aci_model_data|aci_listify("tenant","schemas","templates","anps", "epgs", "contracts") }}'

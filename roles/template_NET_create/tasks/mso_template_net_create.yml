@@ -1,0 +1,51 @@
+- name: Create VRF Template 
+  mso_schema_template_vrf:
+    host: "{{ mso_host }}"
+    username: "{{ mso_user }}"
+    password: "{{ mso_password }}"
+    port: "{{ mso_port }}"
+    schema: "{{ item.tenant_schemas_name }}"
+    template: "{{ item.tenant_schemas_templates_name }}"
+    vrf: "{{ item.tenant_schemas_templates_vrfs_name }}"
+    validate_certs: false
+    state: present
+  loop:  '{{ aci_model_data|aci_listify("tenant","schemas","templates","vrfs") }}'
+  delegate_to: localhost
+
+- name: Create all other BDs in DR Template Network Objects
+  mso_schema_template_bd:
+    host: "{{ mso_host }}"
+    username: "{{ mso_user }}"
+    password: "{{ mso_password }}"
+    port: "{{ mso_port }}"
+    schema: "{{ item.tenant_schemas_name }}"
+    template: "{{ item.tenant_schemas_templates_name }}"
+    vrf: 
+      name: "{{ item.tenant_schemas_templates_bds_vrf }}" 
+      schema: "{{ item.tenant_schemas_name }}"
+      template: "{{ item.tenant_schemas_templates_name }}"
+    bd: "{{ item.tenant_schemas_templates_bds_name }}"
+    layer2_stretch: "{{ item.tenant_schemas_templates_bds_l2Stretch }}"
+    layer2_unknown_unicast: "{{ item.tenant_schemas_templates_bds_l2UnknownUnicast }}"
+    validate_certs: false
+    state: present
+  delegate_to: localhost
+  loop:  '{{ aci_model_data|aci_listify("tenant","schemas","templates","bds") }}'
+
+
+- name: Add subnets to BDs in DR Template Network Objects
+  mso_schema_template_bd_subnet:
+    host: "{{ mso_host }}"
+    username: "{{ mso_user }}"
+    password: "{{ mso_password }}"
+    port: "{{ mso_port }}"
+    schema: "{{ item.tenant_schemas_name }}"
+    template: "{{ item.tenant_schemas_templates_name }}"
+    bd: "{{ item.tenant_schemas_templates_bds_name }}"
+    subnet: "{{ item.tenant_schemas_templates_bds_address }}"
+    scope: "{{ item.tenant_schemas_templates_bds_scope }}"
+    shared:  "{{ item.tenant_schemas_templates_bds_shared }}"
+    validate_certs: false
+    state: present
+  delegate_to: localhost
+  loop:  '{{ aci_model_data|aci_listify("tenant","schemas","templates","bds") }}'

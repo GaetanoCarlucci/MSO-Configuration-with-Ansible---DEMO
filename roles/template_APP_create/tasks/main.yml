@@ -1,0 +1,4 @@
+---
+# tasks file for template_APP_create
+
+- import_tasks: mso_template_app_create.yml
